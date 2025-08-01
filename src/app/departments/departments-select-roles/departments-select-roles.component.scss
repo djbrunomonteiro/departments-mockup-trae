@@ -1,0 +1,59 @@
+.roles-container {
+  h4 {
+    margin-bottom: 8px;
+    color: var(--ion-color-primary);
+    font-weight: 600;
+  }
+
+  .description {
+    margin-bottom: 20px;
+    color: var(--ion-color-medium);
+    font-size: 14px;
+    line-height: 1.4;
+  }
+}
+
+.role-item {
+  margin-bottom: 12px;
+  border-radius: 8px;
+  --background: var(--ion-color-light);
+  
+  ion-input {
+    --padding-start: 16px;
+    --padding-end: 16px;
+  }
+}
+
+.add-role-button {
+  margin-top: 16px;
+  --border-radius: 8px;
+}
+
+.footer-buttons {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  
+  ion-button {
+    flex: 1;
+    --border-radius: 8px;
+  }
+}
+
+ion-content {
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+}
+
+ion-header ion-toolbar {
+  --background: var(--ion-color-primary);
+  --color: white;
+  
+  ion-title {
+    font-weight: 600;
+  }
+  
+  ion-button {
+    --color: white;
+  }
+}

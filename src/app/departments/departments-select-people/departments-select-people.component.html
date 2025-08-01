@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="modalCtrl.dismiss(null, 'cancel')">x</ion-button>
+    </ion-buttons>
+    <ion-title>Selecione</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar (ionInput)="handleInput($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+    <ion-list [inset]="true">
+      @if(search().enable){
+        @for (person of search().results; track $index) {
+          <ion-item (click)="select(person.id)">
+            <ion-checkbox [checked]="selected.includes(person.id)" slot="start" aria-label="people"></ion-checkbox>
+            <ion-label>{{person?.name}}</ion-label>
+            <ion-button (click)="openSelectRoles(person); $event.stopPropagation()" [disabled]="!selected.includes(person.id)"  shape="round" slot="end">
+              <ion-icon slot="icon-only" name="id-card-outline"></ion-icon>
+            </ion-button>
+          </ion-item>
+        }@empty {
+          <p>*Nenhum resultado</p>
+        }
+
+      }@else {
+        @for (person of people; track $index) {
+          <ion-item button (click)="select(person.id)">
+            <ion-checkbox [checked]="selected.includes(person.id)" slot="start" aria-label="people"></ion-checkbox>
+            <ion-label>
+              <p>{{person?.name}}</p>
+              <!-- <p>DJ, Advogado</p> -->
+            </ion-label>
+            <ion-button (click)="openSelectRoles(person); $event.stopPropagation()" [disabled]="!selected.includes(person.id)"  shape="round" slot="end">
+              <ion-icon slot="icon-only" name="id-card-outline"></ion-icon>
+            </ion-button>
+          </ion-item>
+        }@empty {
+          <p>*sem pessoas</p>
+        }
+      }
+    </ion-list>
+
+</ion-content>
+
+<ion-footer>
+  <ion-button expand="block" (click)="save()">Salvar</ion-button>
+</ion-footer>

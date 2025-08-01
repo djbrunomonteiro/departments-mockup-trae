@@ -1,0 +1,60 @@
+.profile-box{
+    width: 100%;
+    height: 150px;
+    background-color: black;
+    position: relative;
+    ion-button{
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        // background-color: var(--ion-color-medium);
+    }
+
+    ion-thumbnail {
+    --size: 130px;
+    --border-radius: 50%;
+    position: absolute;
+    bottom: -30px;
+    left: 20px;
+    }
+}
+
+.inputs-box{
+    padding: 5px;
+    padding-top: 50px;
+
+    ion-item{
+        margin-bottom: 10px;
+    }
+}
+
+.participants-box{
+    padding: 5px;
+    h4{
+        margin-left: 15px;
+        font-size: 14px;
+        color: var(--ion-color-medium);
+    }
+    ion-item{
+        ion-button{
+            width: 40px;
+            height: 40px;
+        }
+
+    }
+}
+
+ion-footer {
+    ion-toolbar {
+        padding: 10px;
+        
+        ion-button {
+            margin: 0;
+            height: 50px;
+            font-weight: bold;
+            font-size: 16px;
+            --border-radius: 8px;
+            text-transform: uppercase;
+        }
+    }
+}

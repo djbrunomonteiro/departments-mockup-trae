@@ -9,7 +9,7 @@ export const routes: Routes = [
       {
         path: 'tab1',
         loadComponent: () =>
-          import('../tab1/tab1.page').then((m) => m.Tab1Page),
+          import('../departments/department-editor/department-editor.component').then((c) => c.DepartmentEditorComponent),
       },
       {
         path: 'tab2',

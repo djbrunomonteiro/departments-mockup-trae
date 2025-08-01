@@ -1,0 +1,64 @@
+<ion-content>
+  <form [formGroup]="form">
+  <div class="profile-box">
+    <ion-button shape="round" color="light">
+      <ion-icon slot="icon-only" name="camera"></ion-icon>
+    </ion-button>
+
+    <ion-thumbnail>
+      <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" />
+    </ion-thumbnail>
+  </div>
+
+  <div class="inputs-box">
+     <ion-item [class.ion-invalid]="form.get('name')?.invalid && form.get('name')?.touched">
+      <ion-input formControlName="name" label="NOME" labelPlacement="stacked" placeholder="Ex: departamento yxz"></ion-input>
+      <ion-note slot="error" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">Nome é obrigatório</ion-note>
+    </ion-item>
+     <ion-item>
+      <ion-input formControlName="description" label="DESCRIÇÃO" labelPlacement="stacked" placeholder="Ex: departamento yxz" rows="1"></ion-input>
+    </ion-item>
+      <ion-item (click)="openManageRoles()" [button]="true" detail="true">
+        <ion-input label="FUNÇÕES E CARGOS" labelPlacement="stacked" [value]="rolesDisplayValue()" rows="1" readonly=""></ion-input>
+      </ion-item>
+  </div>
+
+  
+  <div class="participants-box">
+    <h4>Participantes</h4>
+    <ion-item (click)="openSelectPeople()" >
+      <ion-button slot="start" shape="round" color="primary">
+        <ion-icon slot="icon-only" name="camera"></ion-icon>
+      </ion-button>
+      <ion-label color="primary">
+        Adicionar participantes</ion-label>
+    </ion-item>
+
+    @for (participantCtrl of ctrlParticipants.controls; track $index) {
+      @if (getParticipantById(participantCtrl.get('id')?.value); as participant) {
+        <ion-item [button]="true" (click)="openSelectRoles(participant)">
+          <ion-avatar aria-hidden="true" slot="start">
+            <img alt="" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          </ion-avatar>
+          <ion-label>
+            <h3>{{ participant.name }}</h3>
+            <p>{{ getRolesForParticipant(participant.id) }}</p>
+          </ion-label>
+          <ion-button (click)="removeParticipant(participant.id); $event.stopPropagation()" fill="clear" slot="end">
+            <ion-icon name="trash-outline" color="danger"></ion-icon>
+          </ion-button>
+        </ion-item>
+      }
+    }
+
+  </div>
+  </form>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="block" (click)="save()" color="primary" [disabled]="isButtonDisabled()">
+      Salvar
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

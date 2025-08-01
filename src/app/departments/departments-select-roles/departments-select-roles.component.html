@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Gerenciar Funções/Cargos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()" [disabled]="!isFormValid()" color="primary">
+        Salvar
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="roles-container">
+    <h4>Funções e Cargos do Departamento</h4>
+    <p class="description">Adicione as funções e cargos disponíveis neste departamento.</p>
+    
+    @for (roleControl of rolesForm.controls; track $index) {
+      <ion-item class="role-item">
+        <ion-input 
+          [value]="roleControl.value"
+          (ionInput)="!isFirstControl($index) && roleControl.setValue($event.detail.value)"
+          [readonly]="isFirstControl($index)"
+          label="Função/Cargo"
+          labelPlacement="stacked"
+          placeholder="Ex: Líder, Tesoureiro, Secretário..."
+          [clearInput]="!isFirstControl($index)">
+        </ion-input>
+        
+        @if (rolesForm.length > 1 && !isFirstControl($index)) {
+          <ion-button 
+            (click)="removeRole($index)" 
+            fill="clear" 
+            slot="end" 
+            color="danger">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        }
+      </ion-item>
+    }
+    
+    <ion-button 
+      (click)="addRole()" 
+      expand="block" 
+      fill="outline" 
+      class="add-role-button">
+      <ion-icon name="add" slot="start"></ion-icon>
+      Adicionar Nova Função
+    </ion-button>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="footer-buttons">
+      <ion-button (click)="cancel()" fill="outline" expand="block">
+        Cancelar
+      </ion-button>
+      <ion-button 
+        (click)="save()" 
+        [disabled]="!isFormValid()" 
+        color="primary" 
+        expand="block">
+        Confirmar
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>
