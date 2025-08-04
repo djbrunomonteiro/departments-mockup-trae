@@ -1,0 +1,156 @@
+.agenda-container {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+.agenda-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+
+  ion-icon {
+    font-size: 24px;
+  }
+
+  h3 {
+    margin: 0;
+    color: var(--ion-color-dark);
+    font-weight: 600;
+    font-size: 18px;
+  }
+}
+
+.agenda-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.agenda-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.agenda-item {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 12px;
+  border-left: 4px solid var(--ion-color-primary);
+
+  .item-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+
+    ion-icon {
+      font-size: 18px;
+    }
+
+    .item-label {
+      font-weight: 600;
+      color: var(--ion-color-dark);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .item-content {
+    color: var(--ion-color-dark);
+    font-size: 15px;
+    line-height: 1.4;
+    margin-left: 26px;
+
+    &.participants-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-left: 0;
+      margin-top: 8px;
+
+      ion-chip {
+        margin: 0;
+        font-size: 12px;
+        height: 28px;
+
+        ion-icon {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+// Cores específicas para diferentes tipos de agenda-item
+.agenda-item:nth-child(1) {
+  border-left-color: var(--ion-color-success);
+}
+
+.agenda-item:nth-child(2) {
+  border-left-color: var(--ion-color-danger);
+}
+
+.agenda-section:nth-child(2) .agenda-item {
+  border-left-color: var(--ion-color-warning);
+}
+
+.agenda-section:nth-child(3) .agenda-item {
+  border-left-color: var(--ion-color-secondary);
+}
+
+.agenda-section:nth-child(4) .agenda-item {
+  border-left-color: var(--ion-color-tertiary);
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .agenda-container {
+    margin: 12px 0;
+    padding: 12px;
+  }
+
+  .agenda-header {
+    h3 {
+      font-size: 16px;
+    }
+  }
+
+  .agenda-item {
+    padding: 10px;
+
+    .item-header {
+      .item-label {
+        font-size: 13px;
+      }
+    }
+
+    .item-content {
+      font-size: 14px;
+      margin-left: 22px;
+
+      &.participants-list {
+        ion-chip {
+          font-size: 11px;
+          height: 26px;
+        }
+      }
+    }
+  }
+
+  .agenda-content {
+    gap: 16px;
+  }
+
+  .agenda-section {
+    gap: 10px;
+  }
+}

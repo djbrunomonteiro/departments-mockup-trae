@@ -1,0 +1,43 @@
+<ion-list>
+  <ion-item>
+    <ion-button slot="start" shape="round" color="primary" (click)="onAddEscala()">
+      <ion-icon slot="icon-only" name="add"></ion-icon>
+    </ion-button>
+    <ion-label color="primary" (click)="onAddEscala()">
+      Criar nova escala
+    </ion-label>
+    <ion-button slot="end" fill="clear" color="medium" (click)="toggleExpandAll()">
+      <ion-icon slot="icon-only" [name]="isExpanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+    </ion-button>
+  </ion-item>
+  
+  @for (escala of escalas; track escala.id) {
+    <ion-item button (click)="onEscalaClick(escala)">
+        <ion-label>
+          <h2>{{ escala.titulo }}</h2>
+          <p>{{ formatDate(escala.dataInicial) }} - {{ formatDate(escala.dataFinal) }}</p>
+          <p>{{ escala.local }}</p>
+        </ion-label>
+        
+        <ion-badge [color]="getStatusColor(escala.status)" slot="end">
+          {{ escala.status | titlecase }}
+        </ion-badge>
+      </ion-item>
+    
+
+  }
+</ion-list>
+
+@if (escalas.length === 0) {
+  <ion-card>
+    <ion-card-content class="ion-text-center">
+      <ion-icon name="calendar-outline" size="large" color="medium"></ion-icon>
+      <h3>Nenhuma escala encontrada</h3>
+      <p>Adicione uma nova escala para começar.</p>
+      <ion-button (click)="onAddEscala()" fill="outline">
+        <ion-icon name="add" slot="start"></ion-icon>
+        Adicionar Escala
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+}

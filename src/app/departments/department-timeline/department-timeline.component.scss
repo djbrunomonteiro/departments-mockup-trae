@@ -1,0 +1,198 @@
+.timeline-wrapper {
+  margin: 16px;
+  
+  .timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    
+    h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ion-color-medium);
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .timeline-navigation {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      
+      .current-week {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--ion-color-dark);
+        padding: 0 12px;
+        white-space: nowrap;
+      }
+      
+      ion-button {
+        --padding-start: 8px;
+        --padding-end: 8px;
+        font-size: 12px;
+        font-weight: 500;
+        height: 32px;
+        
+        &[disabled] {
+          opacity: 0.4;
+        }
+      }
+    }
+  }
+  
+  .timeline-container {
+    position: relative;
+    padding-left: 28px;
+    margin-top: 20px;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      left: 12px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--ion-color-light-shade);
+      border-radius: 2px;
+    }
+    
+    .timeline-item {
+      position: relative;
+      margin-bottom: 24px;
+      padding: 8px 0;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      .timeline-marker {
+        position: absolute;
+        left: -20px;
+        top: 8px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 3px solid var(--ion-color-light);
+        background: white;
+        z-index: 1;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        
+        &.marker-created {
+          background: var(--ion-color-success);
+          border-color: var(--ion-color-success);
+        }
+        
+        &.marker-participation {
+          background: var(--ion-color-primary);
+          border-color: var(--ion-color-primary);
+        }
+        
+        &.marker-event {
+          background: var(--ion-color-warning);
+          border-color: var(--ion-color-warning);
+        }
+        
+        &.marker-upcoming {
+          background: var(--ion-color-tertiary);
+          border-color: var(--ion-color-tertiary);
+        }
+        
+        &.marker-notice {
+          background: var(--ion-color-secondary);
+          border-color: var(--ion-color-secondary);
+        }
+        
+        &.marker-info {
+          background: var(--ion-color-medium);
+          border-color: var(--ion-color-medium);
+        }
+      }
+      
+      .timeline-content {
+        padding-left: 12px;
+        
+        .timeline-time {
+          font-size: 13px;
+          color: var(--ion-color-step-600);
+          font-weight: 600;
+          margin-bottom: 6px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        
+        .timeline-description {
+          font-size: 16px;
+          color: var(--ion-color-dark);
+          line-height: 1.5;
+          font-weight: 500;
+          
+          &.participation-format {
+            font-weight: 600;
+            color: var(--ion-color-primary);
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .timeline-wrapper {
+    margin: 12px;
+    
+    .timeline-header {
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-start;
+      
+      h4 {
+        font-size: 13px;
+      }
+      
+      .timeline-navigation {
+        align-self: stretch;
+        justify-content: center;
+        
+        .current-week {
+          font-size: 13px;
+          padding: 0 8px;
+        }
+        
+        ion-button {
+          font-size: 11px;
+          height: 28px;
+        }
+      }
+    }
+    
+    .timeline-container {
+      padding-left: 24px;
+      
+      .timeline-item {
+        margin-bottom: 20px;
+        
+        .timeline-marker {
+          left: -18px;
+          width: 14px;
+          height: 14px;
+          border-width: 2px;
+        }
+        
+        .timeline-content {
+          padding-left: 10px;
+          
+          .timeline-time {
+            font-size: 12px;
+          }
+          
+          .timeline-description {
+            font-size: 15px;
+          }
+        }
+      }
+    }
+  }
+}

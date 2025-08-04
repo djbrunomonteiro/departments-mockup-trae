@@ -1,0 +1,50 @@
+<div class="timeline-wrapper">
+  <div class="timeline-header">
+    <h4>TIMELINE DA SEMANA</h4>
+    
+    <div class="timeline-navigation">
+      <ion-button 
+        fill="clear" 
+        size="small" 
+        [disabled]="!canGoPrevious()"
+        (click)="previousWeek()">
+        {{ getPreviousWeekDate() }}
+      </ion-button>
+      
+      <span class="current-week">{{ getCurrentWeekRange() }}</span>
+      
+      <ion-button 
+        fill="clear" 
+        size="small" 
+        [disabled]="!canGoNext()"
+        (click)="nextWeek()">
+        {{ getNextWeekDate() }}
+      </ion-button>
+    </div>
+  </div>
+  
+  <ion-card>
+    
+    <ion-card-content>
+      <div class="timeline-container">
+        <div class="timeline-item" *ngFor="let event of getWeeklyEvents()">
+          <div class="timeline-marker" [ngClass]="'marker-' + event.type"></div>
+          <div class="timeline-content">
+            <div class="timeline-time" *ngIf="event.type !== 'participation'">{{ event.time }}</div>
+            <div class="timeline-description" [ngClass]="{'participation-format': event.type === 'participation'}">
+              <span *ngIf="event.type === 'participation'">{{ event.time }} - {{ event.description }}</span>
+              <span *ngIf="event.type !== 'participation'">{{ event.description }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="timeline-item" *ngIf="getWeeklyEvents().length === 0">
+          <div class="timeline-marker marker-info"></div>
+          <div class="timeline-content">
+            <div class="timeline-description">Nenhum evento registrado nesta semana</div>
+          </div>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</div>

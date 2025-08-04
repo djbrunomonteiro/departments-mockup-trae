@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="onBackClick()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Detalhes do Departamento</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onEditDepartment()">
+        <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+@if (department) {
+<ion-content>
+  <!-- Perfil do departamento -->
+  <div class="profile-box">
+    <ion-thumbnail>
+      <img [src]="department.thumbnail || 'https://ionicframework.com/docs/img/demos/thumbnail.svg'" alt="Thumbnail">
+    </ion-thumbnail>
+  </div>
+
+  <!-- Informações básicas -->
+  <div class="info-box">
+    <ion-item lines="none">
+      <ion-label>
+        <h1>{{ department.name }}</h1>
+      </ion-label>
+    </ion-item>
+  </div>
+
+  <!-- Participantes -->
+  <div class="participants-box">
+    <h4>PARTICIPANTES ({{ getParticipantsCount() }})</h4>
+    
+    <div class="participants-chips">
+      @for (participant of department.participants; track participant.participants_id) {
+      <ion-chip>
+        <ion-avatar>
+          <img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="Avatar">
+        </ion-avatar>
+        <ion-label>{{ getPersonName(participant.participants_id) }}</ion-label>
+        @if (isLeader(participant.participants_id)) {
+        <ion-icon name="star" color="primary"></ion-icon>
+        }
+      </ion-chip>
+      }
+    </div>
+  </div>
+
+  <!-- Timeline da Semana -->
+  <app-department-timeline [department]="department"></app-department-timeline>
+
+  <!-- Escalas -->
+  <div class="escalas-box">
+    <h4>ESCALAS</h4>
+    <app-department-scalas [department]="department"></app-department-scalas>
+  </div>
+</ion-content>
+}

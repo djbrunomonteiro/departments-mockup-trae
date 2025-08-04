@@ -14,7 +14,17 @@ export const routes: Routes = [
       {
         path: 'tab2',
         loadComponent: () =>
-          import('../tab2/tab2.page').then((m) => m.Tab2Page),
+          import('../departments/departments-list/departments-list.component').then((c) => c.DepartmentsListComponent),
+      },
+      {
+        path: 'departments',
+        loadComponent: () =>
+          import('../departments/departments-list/departments-list.component').then((c) => c.DepartmentsListComponent),
+      },
+      {
+        path: 'departments/:id',
+        loadComponent: () =>
+          import('../departments/department-details/department-details.component').then((c) => c.DepartmentDetailsComponent),
       },
       {
         path: 'tab3',
@@ -23,14 +33,14 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/tabs/departments',
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/tabs/departments',
     pathMatch: 'full',
   },
 ];
