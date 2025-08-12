@@ -1,0 +1,163 @@
+<ion-header class="custom-header">
+  <ion-toolbar color="primary">
+    <ion-title class="header-title">
+      <ion-icon name="calendar-outline" class="title-icon"></ion-icon>
+      {{ isEditMode ? 'Editar Escala' : 'Nova Escala' }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" class="close-button" (click)="cancel()">
+        <ion-icon name="close" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<!-- <ion-content class="custom-content">
+  <form [formGroup]="form" class="escala-form">
+    
+    <div class="form-section">
+      <div class="section-header">
+        <ion-icon name="text-outline" class="section-icon"></ion-icon>
+        <h3>Informações Básicas</h3>
+      </div>
+      
+      <ion-item class="form-item" [class.item-has-error]="isFieldInvalid('titulo')">
+        <ion-label position="stacked">Título da Escala *</ion-label>
+        <ion-input 
+          formControlName="titulo" 
+          placeholder="Ex: Reunião de Planejamento"
+          type="text"
+          maxlength="100">
+        </ion-input>
+      </ion-item>
+      <div class="error-message" *ngIf="isFieldInvalid('titulo')">
+        {{ getFieldError('titulo') }}
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-header">
+        <ion-icon name="calendar-outline" class="section-icon"></ion-icon>
+        <h3>Período</h3>
+      </div>
+      
+      <div class="date-inputs">
+        <ion-item class="form-item date-item" [class.item-has-error]="isFieldInvalid('dataInicial')">
+          <ion-label position="stacked">Data de Início *</ion-label>
+          <ion-datetime-button datetime="dataInicial"></ion-datetime-button>
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime 
+                id="dataInicial" 
+                formControlName="dataInicial"
+                presentation="date"
+                [min]="getCurrentDate()"
+                locale="pt-BR">
+              </ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </ion-item>
+        <div class="error-message" *ngIf="isFieldInvalid('dataInicial')">
+          {{ getFieldError('dataInicial') }}
+        </div>
+        
+        <ion-item class="form-item date-item" [class.item-has-error]="isFieldInvalid('dataFinal')">
+          <ion-label position="stacked">Data de Término *</ion-label>
+          <ion-datetime-button datetime="dataFinal"></ion-datetime-button>
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime 
+                id="dataFinal" 
+                formControlName="dataFinal"
+                presentation="date"
+                [min]="form.get('dataInicial')?.value || getCurrentDate()"
+                locale="pt-BR">
+              </ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </ion-item>
+        <div class="error-message" *ngIf="isFieldInvalid('dataFinal')">
+          {{ getFieldError('dataFinal') }}
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-header">
+        <ion-icon name="location-outline" class="section-icon"></ion-icon>
+        <h3>Local</h3>
+      </div>
+      
+      <ion-item class="form-item" [class.item-has-error]="isFieldInvalid('local')">
+        <ion-label position="stacked">Local do Evento *</ion-label>
+        <ion-input 
+          formControlName="local" 
+          placeholder="Ex: Sala de Reuniões A"
+          type="text"
+          maxlength="100">
+        </ion-input>
+      </ion-item>
+      <div class="error-message" *ngIf="isFieldInvalid('local')">
+        {{ getFieldError('local') }}
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-header">
+        <ion-icon name="flag-outline" class="section-icon"></ion-icon>
+        <h3>Status</h3>
+      </div>
+      
+      <ion-item class="form-item">
+        <ion-label position="stacked">Status da Escala *</ion-label>
+        <ion-select formControlName="status" placeholder="Selecione o status">
+          <ion-select-option 
+            *ngFor="let option of getStatusOptions()" 
+            [value]="option.value">
+            {{ option.label }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+
+    <div class="form-section">
+      <div class="section-header">
+        <ion-icon name="document-text-outline" class="section-icon"></ion-icon>
+        <h3>Observações</h3>
+      </div>
+      
+      <ion-item class="form-item textarea-item">
+        <ion-label position="stacked">Observações Adicionais</ion-label>
+        <ion-textarea 
+          formControlName="observacoes" 
+          placeholder="Adicione observações importantes sobre a escala..."
+          rows="4"
+          maxlength="500">
+        </ion-textarea>
+      </ion-item>
+    </div>
+
+    <div class="action-buttons">
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        color="medium" 
+        (click)="cancel()"
+        class="cancel-button">
+        <ion-icon name="close" slot="start"></ion-icon>
+        Cancelar
+      </ion-button>
+      
+      <ion-button 
+        expand="block" 
+        color="primary" 
+        (click)="save()"
+        [disabled]="form.invalid"
+        class="save-button">
+        <ion-icon name="checkmark" slot="start"></ion-icon>
+        {{ isEditMode ? 'Atualizar' : 'Criar' }} Escala
+      </ion-button>
+    </div>
+    
+  </form>
+</ion-content> -->

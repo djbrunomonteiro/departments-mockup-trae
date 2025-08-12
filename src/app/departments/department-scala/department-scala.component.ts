@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { CommonModule, TitleCasePipe } from '@angular/common';
+import { ModalController } from '@ionic/angular/standalone';
+import { ION_DEFAULT_IMPORTS } from '../../imports/ionic-groups-standalone';
 import { IDepartment } from '../../models/departments.interface';
 
 interface AgendaItem {
@@ -27,7 +28,7 @@ interface Escala {
   templateUrl: './department-scala.component.html',
   styleUrls: ['./department-scala.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule]
+  imports: [CommonModule, ION_DEFAULT_IMPORTS, TitleCasePipe]
 })
 export class DepartmentScalaComponent implements OnInit {
   @Input() department: IDepartment | null = null;
@@ -123,6 +124,16 @@ export class DepartmentScalaComponent implements OnInit {
   }
 
   async closeModal() {
-    await this.modalController.dismiss();
+    try {
+      await this.modalController.dismiss();
+      console.log('Modal fechado com sucesso');
+    } catch (error) {
+      console.error('Erro ao fechar modal:', error);
+      // Fallback: tentar fechar o modal de forma alternativa
+      const topModal = await this.modalController.getTop();
+      if (topModal) {
+        await topModal.dismiss();
+      }
+    }
   }
 }

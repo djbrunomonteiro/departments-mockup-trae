@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { ION_DEFAULT_IMPORTS } from '../../imports/ionic-groups-standalone';
 
 @Component({
   selector: 'app-department-timeline',
   templateUrl: './department-timeline.component.html',
   styleUrls: ['./department-timeline.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule]
+  imports: [CommonModule, ION_DEFAULT_IMPORTS]
 })
 export class DepartmentTimelineComponent implements OnInit {
   @Input() department: any;

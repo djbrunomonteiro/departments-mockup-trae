@@ -1,0 +1,250 @@
+.custom-header {
+  ion-toolbar {
+    --background: var(--ion-color-primary);
+    --color: white;
+    
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      
+      .title-icon {
+        font-size: 20px;
+      }
+    }
+    
+    .close-button {
+      --color: white;
+      --background: transparent;
+      
+      &:hover {
+        --background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}
+
+.custom-content {
+  --background: var(--ion-color-light-shade);
+  
+  .escala-form {
+    padding: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .form-section {
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      
+      .section-icon {
+        font-size: 20px;
+        color: var(--ion-color-primary);
+      }
+      
+      h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--ion-color-dark);
+      }
+    }
+  }
+  
+  .form-item {
+    --background: transparent;
+    --border-color: var(--ion-color-light);
+    --border-width: 1px;
+    --border-style: solid;
+    --border-radius: 8px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    margin-bottom: 8px;
+    
+    ion-label {
+      font-weight: 500;
+      color: var(--ion-color-dark);
+      margin-bottom: 8px;
+    }
+    
+    ion-input, ion-textarea, ion-select {
+      --color: var(--ion-color-dark);
+      --placeholder-color: var(--ion-color-medium);
+    }
+    
+    &.item-has-error {
+      --border-color: var(--ion-color-danger);
+      --border-width: 2px;
+    }
+    
+    &.textarea-item {
+      --min-height: 120px;
+      align-items: flex-start;
+      
+      ion-textarea {
+        margin-top: 8px;
+      }
+    }
+  }
+  
+  .date-inputs {
+    display: grid;
+    gap: 16px;
+    
+    .date-item {
+      ion-datetime-button {
+        --color: var(--ion-color-primary);
+        --background: var(--ion-color-light);
+        --border-radius: 8px;
+        --padding: 12px 16px;
+        width: 100%;
+        text-align: left;
+      }
+    }
+  }
+  
+  .error-message {
+    color: var(--ion-color-danger);
+    font-size: 12px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+    padding-left: 16px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    
+    &::before {
+      content: '⚠';
+      font-size: 14px;
+    }
+  }
+  
+  .action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 24px;
+    padding: 0 4px;
+    
+    .cancel-button {
+      --border-color: var(--ion-color-medium);
+      --color: var(--ion-color-medium);
+      
+      &:hover {
+        --background: var(--ion-color-light);
+      }
+    }
+    
+    .save-button {
+      --background: var(--ion-color-primary);
+      --color: white;
+      font-weight: 600;
+      
+      &:disabled {
+        --background: var(--ion-color-light);
+        --color: var(--ion-color-medium);
+        opacity: 0.6;
+      }
+      
+      &:not(:disabled):hover {
+        --background: var(--ion-color-primary-shade);
+      }
+    }
+  }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .custom-content {
+    .escala-form {
+      padding: 12px;
+    }
+    
+    .form-section {
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    
+    .action-buttons {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      
+      .cancel-button {
+        order: 2;
+      }
+      
+      .save-button {
+        order: 1;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .custom-content {
+    .escala-form {
+      padding: 8px;
+    }
+    
+    .form-section {
+      padding: 12px;
+      
+      .section-header {
+        h3 {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
+
+// Animações
+.form-section {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Estados de foco
+.form-item {
+  transition: all 0.2s ease;
+  
+  &:focus-within {
+    --border-color: var(--ion-color-primary);
+    --border-width: 2px;
+    box-shadow: 0 0 0 3px rgba(var(--ion-color-primary-rgb), 0.1);
+  }
+}
+
+// Customização do ion-datetime
+ion-datetime {
+  --background: white;
+  --color: var(--ion-color-dark);
+}
+
+// Customização do ion-select
+ion-select {
+  --placeholder-color: var(--ion-color-medium);
+  --color: var(--ion-color-dark);
+}

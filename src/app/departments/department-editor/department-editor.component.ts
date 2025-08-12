@@ -1,5 +1,5 @@
 import { Component, ElementRef, inject, Input, OnInit, ViewChild, signal, computed } from '@angular/core';
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 
 import { ION_DEFAULT_IMPORTS } from 'src/app/imports/ionic-groups-standalone';
 import { FormBuilder, Validators, FormArray, FormGroup, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -18,6 +18,7 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
     ION_DEFAULT_IMPORTS,
     FormsModule,
     ReactiveFormsModule,
+    CommonModule,
     NgIf
   ]
 })
@@ -391,7 +392,7 @@ export class DepartmentEditorComponent  implements OnInit {
     return nameControl?.invalid || !nameValue || nameValue.length < 3;
   }
 
-  save(){
+  async save(){
     const nameValue = this.form.get('name')?.value as string;
     if (this.form.valid && nameValue && nameValue.length >= 3) {
       // Gerar ID aleatório
@@ -406,18 +407,19 @@ export class DepartmentEditorComponent  implements OnInit {
       console.log('Salvando departamento:', departmentData);
       
       // Obter departamentos existentes do localStorage ou inicializar array vazio
-      const existingDepartments = JSON.parse(localStorage.getItem('departments') || '[]');
+      const existingDepartments = JSON.parse(localStorage.getItem('departments_mock') || '[]');
       
       // Adicionar novo departamento
       existingDepartments.push(departmentData);
       
       // Salvar no localStorage
-      localStorage.setItem('departments', JSON.stringify(existingDepartments));
+      localStorage.setItem('departments_mock', JSON.stringify(existingDepartments));
       
       // Mostrar mensagem de sucesso
       console.log('Departamento salvo com sucesso!');
-      // Tentaremos usar o toast mais tarde quando o serviço estiver atualizado
-      // this.utils.showToast('Departamento salvo com sucesso!');
+      
+      // Fechar modal e retornar os dados
+      await this.modalCtrl.dismiss(departmentData, 'confirm');
     } else {
       console.log('Formulário inválido:', this.form.value);
       // Marcar todos os campos como touched para mostrar os erros de validação

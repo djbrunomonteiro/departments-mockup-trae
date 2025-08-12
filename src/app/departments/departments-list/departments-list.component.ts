@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IDepartment } from 'src/app/models/departments.interface';
 import { ION_DEFAULT_IMPORTS } from 'src/app/imports/ionic-groups-standalone';
-import { NgFor, NgIf, SlicePipe } from '@angular/common';
+import { CommonModule, NgFor, NgIf, SlicePipe } from '@angular/common';
+import { ModalController } from '@ionic/angular/standalone';
+import { DepartmentEditorComponent } from '../department-editor/department-editor.component';
 
 @Component({
   selector: 'app-departments-list',
@@ -13,14 +15,16 @@ import { NgFor, NgIf, SlicePipe } from '@angular/common';
     ION_DEFAULT_IMPORTS,
     NgFor,
     NgIf,
-    SlicePipe
+    CommonModule,
+    SlicePipe,
+    DepartmentEditorComponent
   ]
 })
 export class DepartmentsListComponent implements OnInit {
 
   departments: IDepartment[] = [];
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private modalController: ModalController) { }
 
   ngOnInit() {
     this.loadDepartments();
@@ -28,11 +32,13 @@ export class DepartmentsListComponent implements OnInit {
 
   loadDepartments() {
     // Carregar departamentos do localStorage ou usar mock
-    const savedDepartments = localStorage.getItem('departments');
+    const savedDepartments = localStorage.getItem('departments_mock');
     if (savedDepartments) {
       this.departments = JSON.parse(savedDepartments);
     } else {
       this.departments = this.getMockDepartments();
+      // Salvar o mock inicial no localStorage
+      localStorage.setItem('departments_mock', JSON.stringify(this.departments));
     }
   }
 
@@ -211,7 +217,36 @@ export class DepartmentsListComponent implements OnInit {
     // Aqui você pode implementar a lógica de exclusão
     this.departments = this.departments.filter(d => d.id !== department.id);
     // Atualizar localStorage
-    localStorage.setItem('departments', JSON.stringify(this.departments));
+    localStorage.setItem('departments_mock', JSON.stringify(this.departments));
+  }
+
+  async onCreateDepartment() {
+    const modal = await this.modalController.create({
+      component: DepartmentEditorComponent,
+      componentProps: {
+        department: undefined // Para criar um novo departamento
+      }
+    });
+
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+    
+    if (role === 'confirm' && data) {
+      // Adicionar o novo departamento à lista
+      const newDepartment = {
+        ...data,
+        id: this.getNextId()
+      };
+      this.departments.push(newDepartment);
+      // Atualizar localStorage
+      localStorage.setItem('departments_mock', JSON.stringify(this.departments));
+      console.log('Novo departamento criado:', newDepartment);
+    }
+  }
+
+  private getNextId(): number {
+    return this.departments.length > 0 ? Math.max(...this.departments.map(d => d.id)) + 1 : 1;
   }
 
 }

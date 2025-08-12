@@ -1,88 +1,144 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>{{ escala?.titulo || 'Detalhes da Escala' }}</ion-title>
+<ion-header class="custom-header">
+  <ion-toolbar color="primary">
+    <ion-title class="header-title">
+      <ion-icon name="calendar" class="title-icon"></ion-icon>
+      {{ escala?.titulo || 'Detalhes da Escala' }}
+    </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()">
-        <ion-icon name="close"></ion-icon>
+      <ion-button fill="clear" class="close-button" (click)="closeModal()">
+        <ion-icon name="close" size="large"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-<div class="agenda-container">
-  <div class="agenda-header">
-    <ion-icon name="calendar" color="primary"></ion-icon>
-    <h3>{{ escala?.titulo || 'Agenda do Departamento' }}</h3>
+<ion-content class="custom-content">
+  <div class="status-container">
+    <ion-chip [color]="getScalaColor()" class="status-chip">
+      <ion-icon [name]="getScalaIcon()" slot="start"></ion-icon>
+      <ion-label>{{ getScalaLevel() }} - {{ getParticipantCount() }} participantes</ion-label>
+    </ion-chip>
+    @if (escala?.status) {
+        <ion-chip [color]="escala?.status === 'ativa' ? 'success' : escala?.status === 'concluida' ? 'medium' : 'warning'" class="status-chip">
+          <ion-icon [name]="escala?.status === 'ativa' ? 'checkmark-circle' : escala?.status === 'concluida' ? 'checkmark-done' : 'time'" slot="start"></ion-icon>
+          <ion-label>{{ escala?.status | titlecase }}</ion-label>
+        </ion-chip>
+      }
   </div>
-  
-  <div class="agenda-content">
-    <!-- Datas -->
-    <div class="agenda-section">
-      <div class="agenda-item">
-        <div class="item-header">
-          <ion-icon name="calendar-outline" color="success"></ion-icon>
-          <span class="item-label">Data Inicial</span>
+
+  <div class="agenda-container">
+    <div class="agenda-header">
+      <div class="header-content">
+        <div class="header-icon-wrapper">
+          <ion-icon name="calendar" class="header-icon"></ion-icon>
         </div>
-        <div class="item-content">
-          {{ agendaItem.dataInicial | date:'dd/MM/yyyy' }}
+        <div class="header-text">
+          <h2>{{ escala?.titulo || 'Agenda do Departamento' }}</h2>
+          <p class="header-subtitle">Detalhes da escala e cronograma</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="agenda-content">
+      <div class="agenda-section">
+        <div class="section-title">
+          <ion-icon name="time-outline" class="section-icon"></ion-icon>
+          <span>Período da Escala</span>
+        </div>
+        
+        <div class="date-range-card">
+          <div class="date-item start-date">
+            <div class="date-icon-wrapper">
+              <ion-icon name="play-circle" color="success"></ion-icon>
+            </div>
+            <div class="date-info">
+              <span class="date-label">Início</span>
+              <span class="date-value">{{ agendaItem.dataInicial | date:'dd/MM/yyyy' }}</span>
+              <span class="date-day">{{ agendaItem.dataInicial | date:'EEEE' }}</span>
+            </div>
+          </div>
+          
+          <div class="date-separator">
+            <ion-icon name="arrow-forward" color="medium"></ion-icon>
+          </div>
+          
+          <div class="date-item end-date">
+            <div class="date-icon-wrapper">
+              <ion-icon name="stop-circle" color="danger"></ion-icon>
+            </div>
+            <div class="date-info">
+              <span class="date-label">Término</span>
+              <span class="date-value">{{ agendaItem.dataFinal | date:'dd/MM/yyyy' }}</span>
+              <span class="date-day">{{ agendaItem.dataFinal | date:'EEEE' }}</span>
+            </div>
+          </div>
         </div>
       </div>
       
-      <div class="agenda-item">
-        <div class="item-header">
-          <ion-icon name="calendar-clear-outline" color="danger"></ion-icon>
-          <span class="item-label">Data Final</span>
+      <div class="agenda-section">
+        <div class="section-title">
+          <ion-icon name="location-outline" class="section-icon"></ion-icon>
+          <span>Local do Evento</span>
         </div>
-        <div class="item-content">
-          {{ agendaItem.dataFinal | date:'dd/MM/yyyy' }}
-        </div>
-      </div>
-    </div>
-    
-    <!-- Local -->
-    <div class="agenda-section">
-      <div class="agenda-item">
-        <div class="item-header">
-          <ion-icon name="location" color="warning"></ion-icon>
-          <span class="item-label">Local</span>
-        </div>
-        <div class="item-content">
-          {{ agendaItem.local }}
+        
+        <div class="info-card location-card">
+          <div class="card-icon">
+            <ion-icon name="business" color="warning"></ion-icon>
+          </div>
+          <div class="card-content">
+            <h4>{{ agendaItem.local }}</h4>
+            <p>Local onde será realizada a escala</p>
+          </div>
         </div>
       </div>
-    </div>
-    
-    <!-- Participantes -->
-    <div class="agenda-section">
-      <div class="agenda-item">
-        <div class="item-header">
-          <ion-icon name="people" color="secondary"></ion-icon>
-          <span class="item-label">Participantes ({{ agendaItem.participantes.length }})</span>
+      
+      <div class="agenda-section">
+        <div class="section-title">
+          <ion-icon name="people-outline" class="section-icon"></ion-icon>
+          <span>Equipe Participante</span>
+          <ion-badge color="secondary" class="count-badge">{{ agendaItem.participantes.length }}</ion-badge>
         </div>
-        <div class="item-content participants-list">
-          @for (participante of agendaItem.participantes; track participante) {
-            <ion-chip color="light">
-              <ion-icon name="person" slot="start"></ion-icon>
-              {{ participante }}
-            </ion-chip>
-          }
+        
+        <div class="participants-card">
+          <div class="participants-header">
+            <ion-icon name="people-circle" color="secondary"></ion-icon>
+            <span class="participants-title">Membros da Equipe</span>
+          </div>
+          <div class="participants-grid">
+            @for (participante of agendaItem.participantes; track participante) {
+              <div class="participant-item">
+                <ion-avatar class="participant-avatar">
+                  <ion-icon name="person"></ion-icon>
+                </ion-avatar>
+                <span class="participant-name">{{ participante }}</span>
+              </div>
+            }
+          </div>
         </div>
       </div>
-    </div>
-    
-    <!-- Observações -->
-    <div class="agenda-section">
-      <div class="agenda-item">
-        <div class="item-header">
-          <ion-icon name="document-text" color="tertiary"></ion-icon>
-          <span class="item-label">Observações</span>
+      
+      <div class="agenda-section">
+        <div class="section-title">
+          <ion-icon name="document-text-outline" class="section-icon"></ion-icon>
+          <span>Observações Importantes</span>
         </div>
-        <div class="item-content">
-          {{ agendaItem.observacoes }}
+        
+        <div class="info-card notes-card">
+          <div class="card-icon">
+            <ion-icon name="information-circle" color="tertiary"></ion-icon>
+          </div>
+          <div class="card-content">
+            <p class="notes-text">{{ agendaItem.observacoes }}</p>
+          </div>
         </div>
+      </div>
+      
+      <div class="close-button-container">
+        <ion-button expand="block" fill="outline" color="medium" (click)="closeModal()" class="bottom-close-button">
+          <ion-icon name="close" slot="start"></ion-icon>
+          Fechar
+        </ion-button>
       </div>
     </div>
   </div>
-</div>
 </ion-content>

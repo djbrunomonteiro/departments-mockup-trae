@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>Departamentos</ion-title>
     <ion-buttons slot="end">
-      <ion-button>
+      <ion-button (click)="onCreateDepartment()">
         <ion-icon name="add" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -46,7 +46,7 @@
       <ion-icon name="business-outline" size="large"></ion-icon>
       <h3>Nenhum departamento encontrado</h3>
       <p>Comece criando seu primeiro departamento</p>
-      <ion-button expand="block" color="primary">
+      <ion-button expand="block" color="primary" (click)="onCreateDepartment()">
         <ion-icon name="add" slot="start"></ion-icon>
         Criar Departamento
       </ion-button>
