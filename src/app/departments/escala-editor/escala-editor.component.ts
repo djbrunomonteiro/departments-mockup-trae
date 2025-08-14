@@ -1,9 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ION_DEFAULT_IMPORTS } from './../../imports/ionic-groups-standalone';
+import { Component, OnInit, Input, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ModalController, AlertController } from '@ionic/angular/standalone';
-import { ION_DEFAULT_IMPORTS } from '../../imports/ionic-groups-standalone';
-import { IonDatetimeButton } from '@ionic/angular/standalone';
+import { ModalController, AlertController, IonDatetimeButton, IonDatetime } from '@ionic/angular/standalone';
 import { IDepartment } from 'src/app/models/departments.interface';
 
 interface Escala {
@@ -23,48 +22,53 @@ interface Escala {
   styleUrls: ['./escala-editor.component.scss'],
   standalone: true,
   imports: [
-    CommonModule, 
-    ION_DEFAULT_IMPORTS, 
-    ReactiveFormsModule, IonDatetimeButton]
+    CommonModule,
+    ReactiveFormsModule,ION_DEFAULT_IMPORTS, IonDatetimeButton, IonDatetime
+  ]
 })
 export class EscalaEditorComponent implements OnInit {
 
   @Input() escala: Escala | null = null;
   @Input() department: IDepartment | null = null;
 
-  form: FormGroup;
+  form = this.fb.group({
+    titulo: ['', [Validators.required, Validators.minLength(3)]],
+    dataInicial: [new Date().toISOString(), [Validators.required]],
+    dataFinal: [new Date().toISOString(), [Validators.required]],
+    local: ['', [Validators.required, Validators.minLength(3)]],
+    participantes: [[] as any[]],
+    observacoes: [''],
+    status: ['pendente', [Validators.required]]
+  });
+
   isEditMode: boolean = false;
+
+  currentDate = signal(new Date().toISOString())
 
   constructor(
     private fb: FormBuilder,
     private modalCtrl: ModalController,
     private alertController: AlertController
   ) {
-    this.form = this.fb.group({
-      titulo: ['', [Validators.required, Validators.minLength(3)]],
-      dataInicial: ['', [Validators.required]],
-      dataFinal: ['', [Validators.required]],
-      local: ['', [Validators.required, Validators.minLength(3)]],
-      participantes: [[]],
-      observacoes: [''],
-      status: ['pendente', [Validators.required]]
-    });
+
   }
 
   ngOnInit() {
-    // this.isEditMode = !!this.escala;
+
+    this.isEditMode = !!this.escala;
     
-    // if (this.escala) {
-    //   this.form.patchValue({
-    //     titulo: this.escala.titulo,
-    //     dataInicial: this.escala.dataInicial.toISOString(),
-    //     dataFinal: this.escala.dataFinal.toISOString(),
-    //     local: this.escala.local,
-    //     participantes: this.escala.participantes,
-    //     observacoes: this.escala.observacoes,
-    //     status: this.escala.status
-    //   });
-    // }
+    if (this.escala) {
+      this.form.patchValue({
+        titulo: this.escala.titulo,
+        dataInicial: this.escala.dataInicial.toISOString(),
+        dataFinal: this.escala.dataFinal.toISOString(),
+        local: this.escala.local,
+        participantes: this.escala?.participantes ? this.escala.participantes as any : [],
+        observacoes: this.escala.observacoes,
+        status: this.escala.status
+      });
+    }
+
   }
 
   async save() {
@@ -73,13 +77,13 @@ export class EscalaEditorComponent implements OnInit {
       
       const escalaData: Escala = {
         id: this.escala?.id || this.generateRandomId(),
-        titulo: formValue.titulo,
-        dataInicial: new Date(formValue.dataInicial),
-        dataFinal: new Date(formValue.dataFinal),
-        local: formValue.local,
+        titulo: formValue.titulo as any,
+        dataInicial: new Date(formValue.dataInicial as any),
+        dataFinal: new Date(formValue.dataFinal as any),
+        local: formValue.local as any,
         participantes: formValue.participantes || [],
         observacoes: formValue.observacoes || '',
-        status: formValue.status
+        status: formValue.status as any,
       };
 
       // Validar se data final é posterior à data inicial
@@ -184,7 +188,4 @@ export class EscalaEditorComponent implements OnInit {
     return Math.floor(Math.random() * 1000000) + 1;
   }
 
-  getCurrentDate(): string {
-    return new Date().toISOString();
-  }
 }

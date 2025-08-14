@@ -1,9 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { ModalController } from '@ionic/angular/standalone';
+import { Component, OnInit, Input, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IDepartment } from 'src/app/models/departments.interface';
 import { ION_DEFAULT_IMPORTS } from 'src/app/imports/ionic-groups-standalone';
 import { DepartmentScalasComponent } from '../department-scalas/department-scalas.component';
 import { DepartmentTimelineComponent } from '../department-timeline/department-timeline.component';
+import { EscalaEditorComponent } from '../escala-editor/escala-editor.component';
 
 @Component({
   selector: 'app-department-details',
@@ -19,6 +21,8 @@ import { DepartmentTimelineComponent } from '../department-timeline/department-t
 export class DepartmentDetailsComponent implements OnInit {
 
   @Input() department: IDepartment | undefined;
+
+  modalCtrl = inject(ModalController);
 
   // Mock de pessoas para exibir nomes dos participantes
   people = [
@@ -298,4 +302,32 @@ export class DepartmentDetailsComponent implements OnInit {
     console.log('Voltar para lista');
     this.router.navigate(['/tabs/departments']);
   }
+
+    async onAddEscala() {
+      const modalRef = await this.modalCtrl.create({
+        component: EscalaEditorComponent,
+        componentProps: {
+          escala: null
+        }
+      });
+  
+      modalRef.present();
+  
+      // const { role, data } = await modalRef.onWillDismiss();
+  
+  
+      
+      // // Aguardar o modal ser fechado
+      // const { data, role } = await modal.onWillDismiss();
+      
+      // if (role === 'confirm' && data) {
+      //   // Adicionar a nova escala à lista
+      //   this.escalas.push(data);
+        
+      //   // Atualizar localStorage
+      //   this.saveEscalasToStorage();
+        
+      //   console.log('Nova escala criada:', data);
+      // }
+    }
 }

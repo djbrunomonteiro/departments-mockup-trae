@@ -10,9 +10,9 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-</ion-header>
+</ion-header> 
 
-<!-- <ion-content class="custom-content">
+<ion-content class="custom-content">
   <form [formGroup]="form" class="escala-form">
     
     <div class="form-section">
@@ -51,8 +51,12 @@
                 id="dataInicial" 
                 formControlName="dataInicial"
                 presentation="date"
-                [min]="getCurrentDate()"
-                locale="pt-BR">
+                [min]="currentDate()"
+                locale="pt-BR"
+                presentation="date-time"
+                minuteValues="0,5,10,15,20,25,30,35,40,45,50,55"
+                >
+                <span slot="time-label">Tiempo</span>
               </ion-datetime>
             </ng-template>
           </ion-modal>
@@ -70,8 +74,11 @@
                 id="dataFinal" 
                 formControlName="dataFinal"
                 presentation="date"
-                [min]="form.get('dataInicial')?.value || getCurrentDate()"
-                locale="pt-BR">
+                [min]="form.get('dataInicial')?.value || currentDate()"
+                locale="pt-BR"
+                presentation="date-time"
+                minuteValues="0,5,10,15,20,25,30,35,40,45,50,55"
+                >
               </ion-datetime>
             </ng-template>
           </ion-modal>
@@ -160,4 +167,4 @@
     </div>
     
   </form>
-</ion-content> -->
+</ion-content>

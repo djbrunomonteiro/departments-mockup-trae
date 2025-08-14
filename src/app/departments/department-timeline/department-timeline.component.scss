@@ -1,5 +1,13 @@
 .timeline-wrapper {
   margin: 16px;
+  ion-card-content{
+    position: relative;
+    .btn-add-aviso{
+      position: absolute;
+      bottom: 0;
+      right: 10px;
+    }
+  }
   
   .timeline-header {
     display: flex;

@@ -1,4 +1,16 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  ion-datetime-button{
+    display: flex;
+    justify-content: start;
+  }
+}
+
 .custom-header {
+  
   ion-toolbar {
     --background: var(--ion-color-primary);
     --color: white;

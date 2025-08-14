@@ -1,18 +1,15 @@
 <ion-list>
-  <ion-item>
-    <ion-button slot="start" shape="round" color="primary" (click)="onAddEscala()">
+  <ion-item (click)="openEditor(null)" >
+    <ion-button   slot="start" shape="round" color="primary" >
       <ion-icon slot="icon-only" name="add"></ion-icon>
     </ion-button>
-    <ion-label color="primary" (click)="onAddEscala()">
+    <ion-label color="primary">
       Criar nova escala
     </ion-label>
-    <ion-button slot="end" fill="clear" color="medium" (click)="toggleExpandAll()">
-      <ion-icon slot="icon-only" [name]="isExpanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
-    </ion-button>
   </ion-item>
   
   @for (escala of escalas; track escala.id) {
-    <ion-item button (click)="onEscalaClick(escala)">
+    <ion-item button (click)="openEditor(escala)">
         <ion-label>
           <h2>{{ escala.titulo }}</h2>
           <p>{{ formatDate(escala.dataInicial) }} - {{ formatDate(escala.dataFinal) }}</p>
@@ -23,8 +20,6 @@
           {{ escala.status | titlecase }}
         </ion-badge>
       </ion-item>
-    
-
   }
 </ion-list>
 
@@ -41,3 +36,10 @@
     </ion-card-content>
   </ion-card>
 }
+
+
+<ion-modal (willDismiss)="onWillDismiss($event)">
+  <ng-template>
+    <app-escala-editor [escala]="selectedEscala"/>
+  </ng-template>
+</ion-modal>

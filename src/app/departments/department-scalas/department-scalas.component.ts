@@ -1,11 +1,14 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, Input, inject, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular/standalone';
-import { ION_DEFAULT_IMPORTS } from '../../imports/ionic-groups-standalone';
-import { Router } from '@angular/router';
 import { IDepartment } from 'src/app/models/departments.interface';
-import { DepartmentScalaComponent } from '../department-scala/department-scala.component';
 import { EscalaEditorComponent } from '../escala-editor/escala-editor.component';
+import { TitleCasePipe } from '@angular/common';
+import { OverlayEventDetail } from '@ionic/core/components';
+import {
+  IonModal,
+} from '@ionic/angular/standalone';
+import { ION_DEFAULT_IMPORTS } from '../../imports/ionic-groups-standalone';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 interface Escala {
   id: number;
@@ -23,11 +26,15 @@ interface Escala {
   templateUrl: './department-scalas.component.html',
   styleUrls: ['./department-scalas.component.scss'],
   standalone: true,
-  imports: [CommonModule, ION_DEFAULT_IMPORTS]
+  imports: [ION_DEFAULT_IMPORTS, TitleCasePipe, IonModal, EscalaEditorComponent]
 })
 export class DepartmentScalasComponent implements OnInit {
 
   @Input() department: IDepartment | undefined;
+
+  readonly modalCtrl = inject(ModalController);
+  readonly utils = inject(UtilsService)
+  
   isExpanded: boolean = false;
 
   escalas: Escala[] = [
@@ -62,12 +69,41 @@ export class DepartmentScalasComponent implements OnInit {
       status: 'concluida'
     }
   ];
+  
+  @ViewChild(IonModal) modal!: IonModal;
 
-  constructor(private router: Router, private modalController: ModalController) { }
+  message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
+  name!: string;
+
+  selectedEscala: Escala | null = null;
+
+  cancel() {
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  confirm() {
+    this.modal.dismiss(this.name, 'confirm');
+  }
+
+  async openEditor(escala: Escala | null = null){
+    this.selectedEscala = escala;
+    if (this.modal) {
+      await this.modal.present();
+    }
+    
+  }
+
+  onWillDismiss(event: CustomEvent<OverlayEventDetail>) {
+    if (event.detail.role === 'confirm') {
+      this.message = `Hello, ${event.detail.data}!`;
+    }
+  }
+
 
   ngOnInit() {
     this.loadEscalasFromStorage();
   }
+
 
   getStatusColor(status: string): string {
     switch (status) {
@@ -96,17 +132,12 @@ export class DepartmentScalasComponent implements OnInit {
   }
 
   async onEscalaClick(escala: Escala) {
-    const modal = await this.modalController.create({
-      component: DepartmentScalaComponent,
+    const modal = await this.modalCtrl.create({
+      component: EscalaEditorComponent,
       componentProps: {
         department: this.department,
         escala: escala
-      },
-      breakpoints: [0, 0.5, 0.8, 1],
-      initialBreakpoint: 0.8,
-      backdropDismiss: true,
-      showBackdrop: true,
-      canDismiss: true
+      }
     });
 
     modal.present();
@@ -117,33 +148,31 @@ export class DepartmentScalasComponent implements OnInit {
   }
 
   async onAddEscala() {
-    const modal = await this.modalController.create({
+    const modalRef = await this.modalCtrl.create({
       component: EscalaEditorComponent,
       componentProps: {
-        escala: null, // Para criar uma nova escala
-        department: this.department
-      },
-      breakpoints: [0, 0.5, 0.8, 1],
-      initialBreakpoint: 0.8,
-      backdropDismiss: true,
-      showBackdrop: true,
-      canDismiss: true
+        escala: null
+      }
     });
 
-    modal.present();
+    modalRef.present();
+
+    // const { role, data } = await modalRef.onWillDismiss();
+
+
     
-    // Aguardar o modal ser fechado
-    const { data, role } = await modal.onWillDismiss();
+    // // Aguardar o modal ser fechado
+    // const { data, role } = await modal.onWillDismiss();
     
-    if (role === 'confirm' && data) {
-      // Adicionar a nova escala à lista
-      this.escalas.push(data);
+    // if (role === 'confirm' && data) {
+    //   // Adicionar a nova escala à lista
+    //   this.escalas.push(data);
       
-      // Atualizar localStorage
-      this.saveEscalasToStorage();
+    //   // Atualizar localStorage
+    //   this.saveEscalasToStorage();
       
-      console.log('Nova escala criada:', data);
-    }
+    //   console.log('Nova escala criada:', data);
+    // }
   }
 
   formatDate(date: Date): string {
