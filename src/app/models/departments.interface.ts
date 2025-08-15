@@ -8,7 +8,7 @@ export interface IDepartment {
   leaders: number[];
   participants: {
     participants_id: number;
-    participants_name?: number;
+    participants_name?: string;
     role: string;
   }[];
   roles: string[];

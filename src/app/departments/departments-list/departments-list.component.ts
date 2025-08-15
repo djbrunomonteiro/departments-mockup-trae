@@ -55,17 +55,17 @@ export class DepartmentsListComponent implements OnInit {
         participants: [
           {
             participants_id: 1,
-            participants_name: 1,
+            participants_name: 'Ana Silva',
             role: 'Gerente'
           },
           {
             participants_id: 2,
-            participants_name: 2,
+            participants_name: 'Carlos Santos',
             role: 'Analista'
           },
           {
             participants_id: 3,
-            participants_name: 3,
+            participants_name: 'Maria Oliveira',
             role: 'Assistente'
           }
         ],
@@ -82,22 +82,22 @@ export class DepartmentsListComponent implements OnInit {
         participants: [
           {
             participants_id: 4,
-            participants_name: 4,
+            participants_name: 'João Costa',
             role: 'Tech Lead'
           },
           {
             participants_id: 5,
-            participants_name: 5,
+            participants_name: 'Pedro Lima',
             role: 'Desenvolvedor Senior'
           },
           {
             participants_id: 6,
-            participants_name: 6,
+            participants_name: 'Lucas Ferreira',
             role: 'Desenvolvedor Junior'
           },
           {
             participants_id: 7,
-            participants_name: 7,
+            participants_name: 'Rafael Souza',
             role: 'DevOps'
           }
         ],
@@ -114,17 +114,17 @@ export class DepartmentsListComponent implements OnInit {
         participants: [
           {
             participants_id: 8,
-            participants_name: 8,
+            participants_name: 'Fernanda Rocha',
             role: 'Coordenador'
           },
           {
             participants_id: 9,
-            participants_name: 9,
+            participants_name: 'Bruno Alves',
             role: 'Designer'
           },
           {
             participants_id: 10,
-            participants_name: 10,
+            participants_name: 'Camila Dias',
             role: 'Social Media'
           }
         ],
@@ -141,17 +141,17 @@ export class DepartmentsListComponent implements OnInit {
         participants: [
           {
             participants_id: 11,
-            participants_name: 11,
+            participants_name: 'Roberto Mendes',
             role: 'Controller'
           },
           {
             participants_id: 12,
-            participants_name: 12,
+            participants_name: 'Juliana Castro',
             role: 'Analista Financeiro'
           },
           {
             participants_id: 13,
-            participants_name: 13,
+            participants_name: 'Marcos Pereira',
             role: 'Assistente Contábil'
           }
         ],
@@ -168,22 +168,22 @@ export class DepartmentsListComponent implements OnInit {
         participants: [
           {
             participants_id: 14,
-            participants_name: 14,
+            participants_name: 'Thiago Barbosa',
             role: 'Gerente de Vendas'
           },
           {
             participants_id: 15,
-            participants_name: 15,
+            participants_name: 'Larissa Gomes',
             role: 'Vendedor Senior'
           },
           {
             participants_id: 16,
-            participants_name: 16,
+            participants_name: 'Gabriel Martins',
             role: 'Vendedor Junior'
           },
           {
             participants_id: 17,
-            participants_name: 17,
+            participants_name: 'Amanda Silva',
             role: 'SDR'
           }
         ],

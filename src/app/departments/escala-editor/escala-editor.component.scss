@@ -143,6 +143,117 @@
     }
   }
   
+  // Estilos para participantes
+  .selected-participants, .add-participants {
+    margin-bottom: 16px;
+    
+    .participants-label {
+      display: block;
+      font-weight: 600;
+      color: var(--ion-color-dark);
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    
+    .participants-chips, .available-participants {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      
+      .participant-chip, .available-chip {
+        margin: 0;
+        transition: all 0.2s ease;
+        
+        ion-avatar {
+          width: 24px;
+          height: 24px;
+          
+          ion-icon {
+            font-size: 16px;
+          }
+        }
+        
+        ion-label {
+          font-size: 13px;
+          font-weight: 500;
+        }
+        
+        .participant-info {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 2px;
+          
+          .participant-name {
+            font-size: 13px;
+            font-weight: 500;
+            margin: 0;
+          }
+          
+          .participant-role {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            background: var(--ion-color-light-shade);
+            color: var(--ion-color-dark);
+          }
+        }
+        
+        .remove-icon {
+          font-size: 18px;
+          color: var(--ion-color-light);
+          cursor: pointer;
+          transition: color 0.2s ease;
+          z-index: 10;
+          
+          &:hover {
+            color: var(--ion-color-danger);
+          }
+        }
+      }
+      
+      .participant-chip {
+        cursor: pointer;
+        
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+      }
+      
+      .available-chip {
+        cursor: pointer;
+        
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        ion-badge {
+          margin-left: 4px;
+          font-size: 10px;
+        }
+      }
+    }
+  }
+  
+  .no-participants {
+    padding: 16px;
+    text-align: center;
+    
+    ion-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 14px;
+      
+      ion-icon {
+        font-size: 16px;
+      }
+    }
+  }
+  
   .action-buttons {
     display: grid;
     grid-template-columns: 1fr 1fr;

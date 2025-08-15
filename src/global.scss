@@ -34,4 +34,22 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/* @import '@ionic/angular/css/palettes/dark.system.css'; */
+
+/* Global styles for Alert inputs */
+ion-alert {
+  .alert-input {
+    color: #000000 !important;
+  }
+  
+  .alert-radio-label,
+  .alert-checkbox-label {
+    color: #000000 !important;
+  }
+  
+  .alert-input-wrapper {
+    .alert-input {
+      color: #000000 !important;
+    }
+  }
+}

@@ -10,13 +10,20 @@ import {
 import { ION_DEFAULT_IMPORTS } from '../../imports/ionic-groups-standalone';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
+interface ParticipanteEscala {
+  id: number;
+  name: string;
+  role: string;
+  customRole?: string;
+}
+
 interface Escala {
   id: number;
   titulo: string;
   dataInicial: Date;
   dataFinal: Date;
   local: string;
-  participantes: string[];
+  participantes: string[] | ParticipanteEscala[]; // Suporte para ambos os formatos
   observacoes: string;
   status: 'ativa' | 'concluida' | 'pendente';
 }
@@ -30,7 +37,7 @@ interface Escala {
 })
 export class DepartmentScalasComponent implements OnInit {
 
-  @Input() department: IDepartment | undefined;
+  @Input() department: IDepartment | null = null;
 
   readonly modalCtrl = inject(ModalController);
   readonly utils = inject(UtilsService)
@@ -151,7 +158,8 @@ export class DepartmentScalasComponent implements OnInit {
     const modalRef = await this.modalCtrl.create({
       component: EscalaEditorComponent,
       componentProps: {
-        escala: null
+        escala: null,
+        department: this.department
       }
     });
 

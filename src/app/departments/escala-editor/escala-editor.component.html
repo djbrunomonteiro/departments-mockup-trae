@@ -111,6 +111,66 @@
 
     <div class="form-section">
       <div class="section-header">
+        <ion-icon name="people-outline" class="section-icon"></ion-icon>
+        <h3>Participantes</h3>
+      </div>
+      
+      <!-- Participantes Selecionados -->
+      <div class="selected-participants" *ngIf="selectedParticipants.length > 0">
+        <ion-label class="participants-label">Participantes Selecionados:</ion-label>
+        <div class="participants-chips">
+          <ion-chip 
+            *ngFor="let participant of selectedParticipants" 
+            color="primary"
+            class="participant-chip clickable"
+            (click)="addParticipant(participant)">
+            <ion-avatar>
+              <ion-icon name="person"></ion-icon>
+            </ion-avatar>
+            <div class="participant-info">
+              <ion-label class="participant-name">{{ participant.name }}</ion-label>
+              <ion-badge color="light" class="participant-role">
+                {{ participant.customRole || participant.role }}
+              </ion-badge>
+            </div>
+            <ion-icon 
+              name="close-circle" 
+              (click)="$event.stopPropagation(); removeParticipant(participant.id)"
+              class="remove-icon">
+            </ion-icon>
+          </ion-chip>
+        </div>
+      </div>
+      
+      <!-- Adicionar Participantes -->
+      <div class="add-participants" *ngIf="getAvailableParticipants().length > 0">
+        <ion-label class="participants-label">Adicionar Participantes:</ion-label>
+        <div class="available-participants">
+          <ion-chip 
+            *ngFor="let participant of getAvailableParticipants()" 
+            color="light"
+            class="available-chip"
+            (click)="addParticipant(participant)">
+            <ion-avatar>
+              <ion-icon name="person-add"></ion-icon>
+            </ion-avatar>
+            <ion-label>{{ participant.name }}</ion-label>
+            <ion-badge color="medium">{{ participant.role }}</ion-badge>
+          </ion-chip>
+        </div>
+      </div>
+      
+      <!-- Mensagem quando não há participantes disponíveis -->
+      <div class="no-participants" *ngIf="availableParticipants.length === 0">
+        <ion-note color="medium">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          Nenhum participante disponível no departamento
+        </ion-note>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-header">
         <ion-icon name="flag-outline" class="section-icon"></ion-icon>
         <h3>Status</h3>
       </div>

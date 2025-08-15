@@ -5,13 +5,20 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ModalController, AlertController, IonDatetimeButton, IonDatetime } from '@ionic/angular/standalone';
 import { IDepartment } from 'src/app/models/departments.interface';
 
+interface ParticipanteEscala {
+  id: number;
+  name: string;
+  role: string;
+  customRole?: string; // Função personalizada para esta escala específica
+}
+
 interface Escala {
   id: number;
   titulo: string;
   dataInicial: Date;
   dataFinal: Date;
   local: string;
-  participantes: string[];
+  participantes: string[] | ParticipanteEscala[];
   observacoes: string;
   status: 'ativa' | 'concluida' | 'pendente';
 }
@@ -36,12 +43,14 @@ export class EscalaEditorComponent implements OnInit {
     dataInicial: [new Date().toISOString(), [Validators.required]],
     dataFinal: [new Date().toISOString(), [Validators.required]],
     local: ['', [Validators.required, Validators.minLength(3)]],
-    participantes: [[] as any[]],
+    participantes: this.fb.control([] as any[]),
     observacoes: [''],
     status: ['pendente', [Validators.required]]
   });
 
   isEditMode: boolean = false;
+  selectedParticipants: any[] = [];
+  availableParticipants: any[] = [];
 
   currentDate = signal(new Date().toISOString())
 
@@ -54,21 +63,156 @@ export class EscalaEditorComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.isEditMode = !!this.escala;
     
+    // Carregar participantes disponíveis do departamento
+    if (this.department?.participants) {
+      this.availableParticipants = this.department.participants.map(p => ({
+        id: p.participants_id,
+        name: p.participants_name || `Participante ${p.participants_id}`,
+        role: p.role
+      }));
+    }
+    
     if (this.escala) {
+      // Para escalas existentes, usar a nova estrutura de participantes
+      if (Array.isArray(this.escala.participantes)) {
+        this.selectedParticipants = this.escala.participantes.map(participante => {
+          if (typeof participante === 'string') {
+            // Compatibilidade com formato antigo
+            const participant = this.availableParticipants.find(p => p.name === participante);
+            return participant || { id: Date.now(), name: participante, role: 'Membro' };
+          } else {
+            // Novo formato com função personalizada
+            return participante;
+          }
+        });
+      } else {
+        this.selectedParticipants = [];
+      }
+      
       this.form.patchValue({
         titulo: this.escala.titulo,
         dataInicial: this.escala.dataInicial.toISOString(),
         dataFinal: this.escala.dataFinal.toISOString(),
         local: this.escala.local,
-        participantes: this.escala?.participantes ? this.escala.participantes as any : [],
+        participantes: this.selectedParticipants,
         observacoes: this.escala.observacoes,
         status: this.escala.status
       });
     }
+  }
 
+  // Métodos para gerenciar participantes
+  async addParticipant(participant: any) {
+    const existingParticipant = this.selectedParticipants.find(p => p.id === participant.id);
+    
+    if (!existingParticipant) {
+      // Participante não selecionado - adicionar novo
+      const customRole = await this.selectParticipantRole(participant);
+      if (customRole !== null) {
+        const participantWithRole = {
+          ...participant,
+          customRole: customRole || participant.role
+        };
+        this.selectedParticipants.push(participantWithRole);
+        this.updateFormParticipants();
+      }
+    } else {
+      // Participante já selecionado - editar função
+      const customRole = await this.selectParticipantRole(existingParticipant);
+      if (customRole !== null) {
+        existingParticipant.customRole = customRole || participant.role;
+        this.updateFormParticipants();
+      }
+    }
+  }
+
+  removeParticipant(participantId: number) {
+    this.selectedParticipants = this.selectedParticipants.filter(p => p.id !== participantId);
+    this.updateFormParticipants();
+  }
+
+  private updateFormParticipants() {
+    // Agora salvamos a estrutura completa dos participantes
+    this.form.patchValue({ participantes: this.selectedParticipants });
+  }
+
+  getAvailableParticipants() {
+    return this.availableParticipants.filter(p => 
+      !this.selectedParticipants.find(sp => sp.id === p.id)
+    );
+  }
+
+  async selectParticipantRole(participant: any): Promise<string | null> {
+    return new Promise(async (resolve) => {
+      const alert = await this.alertController.create({
+        header: `Função para ${participant.name}`,
+        message: 'Selecione ou digite a função deste participante nesta escala:',
+        inputs: [
+          {
+            name: 'customRole',
+            type: 'text',
+            placeholder: 'Digite uma função personalizada...',
+            value: ''
+          },
+          {
+            name: 'roleOption',
+            type: 'radio',
+            label: `Usar função padrão: ${participant.role}`,
+            value: participant.role,
+            checked: true
+          },
+          {
+            name: 'roleOption',
+            type: 'radio',
+            label: 'Coordenador',
+            value: 'Coordenador'
+          },
+          {
+            name: 'roleOption',
+            type: 'radio',
+            label: 'Supervisor',
+            value: 'Supervisor'
+          },
+          {
+            name: 'roleOption',
+            type: 'radio',
+            label: 'Assistente',
+            value: 'Assistente'
+          },
+          {
+            name: 'roleOption',
+            type: 'radio',
+            label: 'Especialista',
+            value: 'Especialista'
+          }
+        ],
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            handler: () => {
+              resolve(null);
+            }
+          },
+          {
+            text: 'Confirmar',
+            handler: (data) => {
+              // Se há texto personalizado, usar ele
+              if (data.customRole && data.customRole.trim()) {
+                resolve(data.customRole.trim());
+              } else {
+                // Senão, usar a opção selecionada
+                resolve(data.roleOption || participant.role);
+              }
+            }
+          }
+        ]
+      });
+
+      await alert.present();
+    });
   }
 
   async save() {
@@ -81,7 +225,7 @@ export class EscalaEditorComponent implements OnInit {
         dataInicial: new Date(formValue.dataInicial as any),
         dataFinal: new Date(formValue.dataFinal as any),
         local: formValue.local as any,
-        participantes: formValue.participantes || [],
+        participantes: this.selectedParticipants.map(p => p.name),
         observacoes: formValue.observacoes || '',
         status: formValue.status as any,
       };
