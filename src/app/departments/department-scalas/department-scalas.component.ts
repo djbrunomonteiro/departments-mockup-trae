@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, inject, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ModalController } from '@ionic/angular/standalone';
 import { IDepartment } from 'src/app/models/departments.interface';
 import { EscalaEditorComponent } from '../escala-editor/escala-editor.component';
@@ -40,7 +40,8 @@ export class DepartmentScalasComponent implements OnInit {
   @Input() department: IDepartment | null = null;
 
   readonly modalCtrl = inject(ModalController);
-  readonly utils = inject(UtilsService)
+  readonly utils = inject(UtilsService);
+  readonly cdr = inject(ChangeDetectorRef);
   
   isExpanded: boolean = false;
 
@@ -139,6 +140,7 @@ export class DepartmentScalasComponent implements OnInit {
   }
 
   async onEscalaClick(escala: Escala) {
+    console.log('✏️ Abrindo modal para editar escala:', escala.titulo);
     const modal = await this.modalCtrl.create({
       component: EscalaEditorComponent,
       componentProps: {
@@ -150,11 +152,20 @@ export class DepartmentScalasComponent implements OnInit {
     modal.present();
     
     // Aguardar o modal ser fechado
-    const { data } = await modal.onWillDismiss();
-    console.log('Modal fechado:', data);
+    const { data, role } = await modal.onWillDismiss();
+    console.log('🔄 Modal de edição fechado - Role:', role, 'Data:', data);
+    
+    if (role === 'confirm' && data) {
+      // Recarregar escalas do localStorage para incluir as alterações
+      console.log('🔄 Recarregando escalas após editar');
+      this.loadEscalasFromStorage();
+      
+      console.log('✅ Escala editada:', data);
+    }
   }
 
   async onAddEscala() {
+    console.log('➕ Abrindo modal para adicionar nova escala');
     const modalRef = await this.modalCtrl.create({
       component: EscalaEditorComponent,
       componentProps: {
@@ -165,26 +176,27 @@ export class DepartmentScalasComponent implements OnInit {
 
     modalRef.present();
 
-    // const { role, data } = await modalRef.onWillDismiss();
-
-
+    // Aguardar o modal ser fechado
+    const { data, role } = await modalRef.onWillDismiss();
+    console.log('🔄 Modal fechado - Role:', role, 'Data:', data);
     
-    // // Aguardar o modal ser fechado
-    // const { data, role } = await modal.onWillDismiss();
-    
-    // if (role === 'confirm' && data) {
-    //   // Adicionar a nova escala à lista
-    //   this.escalas.push(data);
+    if (role === 'confirm' && data) {
+      // Recarregar escalas do localStorage para incluir a nova escala
+      console.log('🔄 Recarregando escalas após adicionar');
+      this.loadEscalasFromStorage();
       
-    //   // Atualizar localStorage
-    //   this.saveEscalasToStorage();
-      
-    //   console.log('Nova escala criada:', data);
-    // }
+      console.log('✅ Nova escala criada:', data);
+    }
   }
 
   formatDate(date: Date): string {
-    return date.toLocaleDateString('pt-BR');
+    return date.toLocaleString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   }
 
   toggleExpandAll() {
@@ -195,6 +207,8 @@ export class DepartmentScalasComponent implements OnInit {
   private loadEscalasFromStorage() {
     try {
       const escalasFromStorage = localStorage.getItem('escalas_mock');
+      console.log('🔄 Carregando escalas do localStorage:', escalasFromStorage);
+      
       if (escalasFromStorage) {
         const escalasData = JSON.parse(escalasFromStorage);
         // Converter strings de data de volta para objetos Date
@@ -203,12 +217,17 @@ export class DepartmentScalasComponent implements OnInit {
           dataInicial: new Date(escala.dataInicial),
           dataFinal: new Date(escala.dataFinal)
         }));
+        console.log('✅ Escalas carregadas:', this.escalas.length, 'escalas');
+        
+        // Forçar detecção de mudanças
+        this.cdr.detectChanges();
       } else {
         // Se não há escalas no localStorage, salvar as escalas mock iniciais
+        console.log('📝 Salvando escalas mock iniciais no localStorage');
         this.saveEscalasToStorage();
       }
     } catch (error) {
-      console.error('Erro ao carregar escalas do localStorage:', error);
+      console.error('❌ Erro ao carregar escalas do localStorage:', error);
       // Em caso de erro, manter as escalas mock
     }
   }

@@ -6,6 +6,7 @@ import { ION_DEFAULT_IMPORTS } from 'src/app/imports/ionic-groups-standalone';
 import { DepartmentScalasComponent } from '../department-scalas/department-scalas.component';
 import { DepartmentTimelineComponent } from '../department-timeline/department-timeline.component';
 import { EscalaEditorComponent } from '../escala-editor/escala-editor.component';
+import { DepartmentsSelectPeopleComponent } from '../departments-select-people/departments-select-people.component';
 
 @Component({
   selector: 'app-department-details',
@@ -298,37 +299,92 @@ export class DepartmentDetailsComponent implements OnInit {
     // Aqui você pode implementar navegação para o editor
   }
 
+  async onAddParticipant() {
+    if (!this.department) return;
+
+    // Obter IDs dos participantes atuais
+    const currentParticipantIds = this.department.participants?.map(p => p.participants_id) || [];
+
+    const modalRef = await this.modalCtrl.create({
+      component: DepartmentsSelectPeopleComponent,
+      componentProps: {
+        selected: currentParticipantIds,
+        people: this.people
+      }
+    });
+
+    modalRef.present();
+
+    const { data, role } = await modalRef.onWillDismiss();
+    
+    if (role === 'confirm' && data) {
+      // Converter IDs selecionados para objetos de participantes
+      const newParticipants = data.participants.map((id: number) => {
+        const person = this.people.find(p => p.id === id);
+        return {
+          participants_id: id,
+          participants_name: person?.name || 'Desconhecido',
+          role: 'Membro' // Por padrão, novos participantes são membros
+        };
+      });
+      
+      // Atualizar os participantes do departamento
+      this.department.participants = newParticipants;
+      
+      // Salvar no localStorage
+      this.saveDepartmentToStorage();
+      
+      console.log('Participantes atualizados:', this.department.participants);
+    }
+  }
+
   onBackClick() {
     console.log('Voltar para lista');
     this.router.navigate(['/tabs/departments']);
   }
 
-    async onAddEscala() {
-      const modalRef = await this.modalCtrl.create({
-        component: EscalaEditorComponent,
-        componentProps: {
-          escala: null,
-          department: this.department
-        }
-      });
-  
-      modalRef.present();
-  
-      // const { role, data } = await modalRef.onWillDismiss();
-  
-  
-      
-      // // Aguardar o modal ser fechado
-      // const { data, role } = await modal.onWillDismiss();
-      
-      // if (role === 'confirm' && data) {
-      //   // Adicionar a nova escala à lista
-      //   this.escalas.push(data);
-        
-      //   // Atualizar localStorage
-      //   this.saveEscalasToStorage();
-        
-      //   console.log('Nova escala criada:', data);
-      // }
+  async onAddEscala() {
+    const modalRef = await this.modalCtrl.create({
+      component: EscalaEditorComponent,
+      componentProps: {
+        escala: null,
+        department: this.department
+      }
+    });
+
+    modalRef.present();
+
+    // Aguardar o modal ser fechado
+    const { data, role } = await modalRef.onWillDismiss();
+    
+    if (role === 'confirm' && data) {
+      console.log('Nova escala criada:', data);
+      // A escala foi salva no localStorage pelo EscalaEditorComponent
     }
+  }
+
+  private saveDepartmentToStorage() {
+    if (!this.department) return;
+
+    // Carregar departamentos existentes
+    const savedDepartments = localStorage.getItem('departments');
+    let departments: IDepartment[] = [];
+    
+    if (savedDepartments) {
+      departments = JSON.parse(savedDepartments);
+    } else {
+      departments = this.getMockDepartments();
+    }
+
+    // Encontrar e atualizar o departamento
+    const index = departments.findIndex(dept => dept.id === this.department!.id);
+    if (index !== -1) {
+      departments[index] = this.department;
+    } else {
+      departments.push(this.department);
+    }
+
+    // Salvar de volta no localStorage
+    localStorage.setItem('departments', JSON.stringify(departments));
+  }
 }

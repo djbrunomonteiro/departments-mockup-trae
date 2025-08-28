@@ -123,7 +123,7 @@
             *ngFor="let participant of selectedParticipants" 
             color="primary"
             class="participant-chip clickable"
-            (click)="addParticipant(participant)">
+            (click)="openParticipantRoleModal(participant)">
             <ion-avatar>
               <ion-icon name="person"></ion-icon>
             </ion-avatar>
@@ -150,7 +150,8 @@
             *ngFor="let participant of getAvailableParticipants()" 
             color="light"
             class="available-chip"
-            (click)="addParticipant(participant)">
+            (click)="openParticipantRoleModal(participant)"
+            id="participant-role-modal-trigger">
             <ion-avatar>
               <ion-icon name="person-add"></ion-icon>
             </ion-avatar>
@@ -227,4 +228,92 @@
     </div>
     
   </form>
+
+  <!-- Modal inline para seleção de função do participante -->
+  <ion-modal #participantRoleModal [isOpen]="isParticipantRoleModalOpen" (didDismiss)="onParticipantRoleModalDismiss($event)">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Função para {{ selectedParticipant?.name }}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeParticipantRoleModal()">
+              <ion-icon name="close"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+        <div class="participant-info">
+          <ion-chip color="primary">
+            <ion-label>{{ selectedParticipant?.name }}</ion-label>
+          </ion-chip>
+          <p>Selecione ou digite a função deste participante nesta escala:</p>
+        </div>
+
+        <form [formGroup]="roleForm" (ngSubmit)="confirmParticipantRole()">
+          <!-- Campo de texto personalizado -->
+          <ion-item>
+            <ion-label position="stacked">Função personalizada</ion-label>
+            <ion-input 
+              formControlName="customRole" 
+              placeholder="Digite uma função personalizada..."
+              type="text">
+            </ion-input>
+          </ion-item>
+
+          <!-- Separador -->
+          <div class="separator">
+            <ion-text color="medium">
+              <p>ou selecione uma das opções abaixo:</p>
+            </ion-text>
+          </div>
+
+          <!-- Opções de função -->
+          <ion-radio-group formControlName="selectedRole">
+            <ion-item>
+              <ion-radio slot="start" [value]="selectedParticipant?.role"></ion-radio>
+              <ion-label>Usar função padrão: {{ selectedParticipant?.role }}</ion-label>
+            </ion-item>
+            
+            <ion-item>
+              <ion-radio slot="start" value="Coordenador"></ion-radio>
+              <ion-label>Coordenador</ion-label>
+            </ion-item>
+            
+            <ion-item>
+              <ion-radio slot="start" value="Supervisor"></ion-radio>
+              <ion-label>Supervisor</ion-label>
+            </ion-item>
+            
+            <ion-item>
+              <ion-radio slot="start" value="Assistente"></ion-radio>
+              <ion-label>Assistente</ion-label>
+            </ion-item>
+            
+            <ion-item>
+              <ion-radio slot="start" value="Especialista"></ion-radio>
+              <ion-label>Especialista</ion-label>
+            </ion-item>
+          </ion-radio-group>
+        </form>
+      </ion-content>
+
+      <ion-footer>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button fill="clear" (click)="closeParticipantRoleModal()">
+              Cancelar
+            </ion-button>
+          </ion-buttons>
+          <ion-buttons slot="end">
+            <ion-button fill="solid" (click)="confirmParticipantRole()" [disabled]="!isRoleFormValid()">
+              Confirmar
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-footer>
+    </ng-template>
+  </ion-modal>
+
 </ion-content>

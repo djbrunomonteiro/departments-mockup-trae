@@ -34,7 +34,12 @@
 
   <!-- Participantes -->
   <div class="participants-box">
-    <h4>PARTICIPANTES ({{ getParticipantsCount() }})</h4>
+    <div class="participants-header">
+      <h4>PARTICIPANTES ({{ getParticipantsCount() }})</h4>
+      <ion-button fill="clear" size="small" (click)="onAddParticipant()">
+        <ion-icon slot="icon-only" name="add" color="primary"></ion-icon>
+      </ion-button>
+    </div>
     
     <div class="participants-chips">
       @for (participant of department.participants; track participant.participants_id) {

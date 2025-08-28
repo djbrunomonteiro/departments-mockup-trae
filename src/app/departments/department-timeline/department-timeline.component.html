@@ -48,9 +48,93 @@
 
       <ion-button 
         class="btn-add-aviso"
-        size="small">
+        size="small"
+        (click)="openAddAvisoModal()">
          +
       </ion-button>
+
+      <!-- Modal inline para adicionar avisos -->
+      <ion-modal #addAvisoModal [isOpen]="isAddAvisoModalOpen" (willDismiss)="onModalWillDismiss($event)">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar color="primary">
+              <ion-title>Adicionar Aviso</ion-title>
+              <ion-buttons slot="end">
+                <ion-button fill="clear" (click)="closeAddAvisoModal()">
+                  <ion-icon name="close"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          
+          <ion-content class="ion-padding">
+            <form [formGroup]="avisoForm" (ngSubmit)="saveAviso()">
+              <ion-item>
+                <ion-label position="stacked">Título do Aviso *</ion-label>
+                <ion-input 
+                  formControlName="titulo"
+                  placeholder="Ex: Mudança no cronograma"
+                  type="text">
+                </ion-input>
+              </ion-item>
+              
+              <ion-item>
+                <ion-label position="stacked">Descrição *</ion-label>
+                <ion-textarea 
+                  formControlName="descricao"
+                  placeholder="Descreva o aviso..."
+                  rows="4">
+                </ion-textarea>
+              </ion-item>
+              
+              <ion-item>
+                <ion-label position="stacked">Data e Hora *</ion-label>
+                <ion-datetime-button datetime="avisoDateTime"></ion-datetime-button>
+                <ion-modal [keepContentsMounted]="true">
+                  <ng-template>
+                    <ion-datetime 
+                      id="avisoDateTime"
+                      formControlName="dataHora"
+                      presentation="date-time"
+                      locale="pt-BR"
+                      minuteValues="0,5,10,15,20,25,30,35,40,45,50,55">
+                    </ion-datetime>
+                  </ng-template>
+                </ion-modal>
+              </ion-item>
+              
+              <ion-item>
+                <ion-label position="stacked">Tipo</ion-label>
+                <ion-select formControlName="tipo" placeholder="Selecione o tipo">
+                  <ion-select-option value="notice">Aviso Geral</ion-select-option>
+                  <ion-select-option value="warning">Alerta</ion-select-option>
+                  <ion-select-option value="info">Informação</ion-select-option>
+                  <ion-select-option value="urgent">Urgente</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </form>
+          </ion-content>
+          
+          <ion-footer>
+            <ion-toolbar>
+              <ion-buttons slot="start">
+                <ion-button fill="clear" (click)="closeAddAvisoModal()">
+                  Cancelar
+                </ion-button>
+              </ion-buttons>
+              <ion-buttons slot="end">
+                <ion-button 
+                  fill="solid" 
+                  color="primary"
+                  (click)="saveAviso()"
+                  [disabled]="!avisoForm.valid">
+                  Salvar Aviso
+                </ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-footer>
+        </ng-template>
+      </ion-modal>
     </ion-card-content>
   </ion-card>
 </div>
